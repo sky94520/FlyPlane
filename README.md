@@ -1,5 +1,7 @@
 ﻿# 1.简介
 >本游戏是基于SDL_Engine开发的一个飞机大战的游戏，在内部采用了box2d作为物理碰撞。
+>游戏截图:<br>
+>![avatar](./capture.png)
 # 2.不满意的地方
 >1. GameScene有太多的Delegate
 >2. 在何处实现bullet的数目更新,目前是在PlayerLayer::update()每次发送信息
