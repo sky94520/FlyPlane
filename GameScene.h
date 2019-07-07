@@ -1,7 +1,7 @@
 ﻿#ifndef __GameScene_H__
 #define __GameScene_H__
 #include "SDL_Engine/SDL_Engine.h"
-#include "OperateLayer.h"
+#include "TouchLayer.h"
 #include "BulletLayer.h"
 #include "Plane.h"
 #include "PlayerLayer.h"
@@ -11,7 +11,7 @@
 using namespace SDL;
 class PanelLayer;
 
-class GameScene:public Scene,public OperateLayerDelegate,public PlayerLayerDelegate
+class GameScene:public Scene,public TouchLayerDelegate,public PlayerLayerDelegate
 	,public EnemyLayerDelegate,public GameOverDelegate
 	,public b2ContactListener
 {
@@ -22,7 +22,7 @@ public:
 	static int ENEMY_BULLET_MASKBIT;//敌机子弹
 	static int BORDER_MASKBIT;//边界
 private:
-	OperateLayer*m_pOperateLayer;
+	TouchLayer*m_pTouchLayer;
 	PlayerLayer*m_pPlayerLayer;
 	BulletLayer*m_pBulletLayer;
 	EnemyLayer*m_pEnemyLayer;
@@ -36,9 +36,8 @@ public:
 
 	virtual void update(float dt);
 private:
-	virtual void degreeUpdate(const Point&degree);
-	virtual void wantShooting();
-
+	virtual void onKeyPressed(SDL_Keycode,SDL_Event*);
+	virtual void onKeyReleased(SDL_Keycode,SDL_Event*);
 	virtual void shooting(Plane*plane,BulletType type);
 	virtual void gamePause();//游戏暂停
 	virtual void gameResume();//游戏恢复

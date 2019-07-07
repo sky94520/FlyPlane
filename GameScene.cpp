@@ -11,7 +11,7 @@ int GameScene::ENEMY_BULLET_MASKBIT = 0x08;
 int GameScene::BORDER_MASKBIT = 0x10;
 
 GameScene::GameScene()
-	:m_pOperateLayer(nullptr),m_pPlayerLayer(nullptr)
+	:m_pTouchLayer(nullptr),m_pPlayerLayer(nullptr)
 	,m_pBulletLayer(nullptr),m_pEnemyLayer(nullptr)
 	,m_pPanelLayer(nullptr),m_pGameOverLayer(nullptr)
 {
@@ -35,9 +35,9 @@ bool GameScene::init()
 	SoundManager::getInstance()->preloadEffect("music/bigplane_bomb.wav");
 	SoundManager::getInstance()->preloadEffect("music/bullet.ogg");
 	//触摸分发层
-	m_pOperateLayer = OperateLayer::create();
-	m_pOperateLayer->setDelegate(this);
-	this->addChild(m_pOperateLayer);
+	m_pTouchLayer = TouchLayer::create();
+	m_pTouchLayer->setDelegate(this);
+	this->addChild(m_pTouchLayer);
 	//子弹层
 	m_pBulletLayer = BulletLayer::create();
 	this->addChild(m_pBulletLayer);
@@ -88,13 +88,13 @@ void GameScene::update(float dt)
 	PhysicalEngine::getInstance()->step(dt,0,0);
 	//PhysicalEngine::getInstance()->drawDebugData();
 }
-void GameScene::degreeUpdate(const Point&degree)
+void GameScene::onKeyPressed(SDL_Keycode keycode,SDL_Event*event)
 {
-	m_pPlayerLayer->degreeUpdate(degree);
+	m_pPlayerLayer->onKeyPressed(keycode,event);
 }
-void GameScene::wantShooting()
+void GameScene::onKeyReleased(SDL_Keycode keycode,SDL_Event*event)
 {
-	m_pPlayerLayer->wantShooting();
+	m_pPlayerLayer->onKeyReleased(keycode,event);
 }
 void GameScene::shooting(Plane*plane,BulletType type)
 {
@@ -182,6 +182,7 @@ void GameScene::initPhysicalWorld()
 	Size s = Director::getInstance()->getVisibleSize();
 	auto physicalEngine = PhysicalEngine::getInstance();
 	//初始化物理世界
+	//physicalEngine->initPhysicalWorld();
 	b2Body*bodyes[4];
 	//创建边界 top
 	bodyes[0] = physicalEngine->createEdge(Point(0,0),Point(s.width,0),b2BodyType::b2_staticBody);

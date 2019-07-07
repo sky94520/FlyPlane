@@ -14,7 +14,8 @@ public:
 	~VirtualStick();
 	static VirtualStick*create(Sprite*stick,Sprite*bg);
 	bool init(Sprite*stick,Sprite*bg);
-	float selected(const Point&pos);
+	void selected(const Point&pos);
+	Point getDirection();
 	void unselected();
 };
 #endif

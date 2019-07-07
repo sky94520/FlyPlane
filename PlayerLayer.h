@@ -16,8 +16,9 @@ class PlayerLayer:public Layer,public PlaneDelegate
 {
 private:
 	Player*m_pPlayer;
-	bool m_bAdjustPos;//是否调整飞机位置
-	float m_endAngle;
+	bool m_bRightPressed;
+	bool m_bLeftPressed;
+
 	PlayerLayerDelegate*m_pDelegate;
 public:
 	PlayerLayer();
@@ -26,14 +27,15 @@ public:
 	bool init();
 	virtual void update(float dt);
 	//对主角进行操作
-	void degreeUpdate(const Point&degree);
-	void wantShooting();
+	void onKeyPressed(SDL_Keycode,SDL_Event*);
+	void onKeyReleased(SDL_Keycode,SDL_Event*);
 
 	 Plane*getPlayer()const;
 	 void setDelegate(PlayerLayerDelegate*pDelegate);
 	 void reset();
 private:
-	void playerRevive();//主角重生
+	 void playerRevive();//主角重生
+
 	void bindPhysicalPlane(Plane*plane);
 
 	virtual void shooting(Plane*plane,BulletType type);

@@ -33,7 +33,7 @@ bool VirtualStick::init(Sprite*stick,Sprite*bg)
 
 	return true;
 }
-float VirtualStick::selected(const Point&pos)
+void VirtualStick::selected(const Point&pos)
 {
 	Point nodePoint = this->convertToNodeSpace(pos);
 	//不出界
@@ -54,7 +54,15 @@ float VirtualStick::selected(const Point&pos)
 		Point endPos = Point(startPos.x+deltaX,startPos.y+deltaY);
 		m_pStick->setPosition(endPos);
 	}
-	return degree;
+}
+Point VirtualStick::getDirection()
+{
+	float r = m_pStickBackground->getContentSize().width/2;
+	Point point1 = m_pStick->getPosition();
+	Point point2 = m_pStickBackground->getPosition();
+	Point delta = point1 - point2;
+
+	return Point(delta.x/r,delta.y/r);
 }
 void VirtualStick::unselected()
 {

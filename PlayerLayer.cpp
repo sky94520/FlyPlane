@@ -5,8 +5,8 @@
 #include "DynamicData.h"
 
 PlayerLayer::PlayerLayer()
-	:m_pPlayer(nullptr),m_pDelegate(nullptr)
-	,m_bAdjustPos(false),m_endAngle(0.f)
+	:m_pPlayer(nullptr),m_bRightPressed(false)
+	,m_bLeftPressed(false),m_pDelegate(nullptr)
 {
 }
 PlayerLayer::~PlayerLayer()
@@ -21,10 +21,10 @@ bool PlayerLayer::init()
 	m_pPlayer->getSprite()->setColorMod(0,255,255);
 	//设置飞行
 	m_pPlayer->setFlyBehavior(new SteadyFly());
-	//设置发射子弹
-	m_pPlayer->setBulletNum(2);
+
 	m_pPlayer->setDelegate(this);
 	//设置相应参数
+	m_pPlayer->setBulletNum(2);
 	this->playerRevive();
 
 	this->addChild(m_pPlayer);
@@ -58,52 +58,65 @@ void PlayerLayer::update(float dt)
 	//角色死亡，不再接收按键
 	if(m_pPlayer->isDead())
 		return;
-	//需要调整位置
-	/*if(m_bAdjustPos)
+	if(m_bRightPressed)
 	{
-		float curAngle = m_pPlayer->getSprite()->getRotation();
-		if(m_endAngle > curAngle)
-		{
-			curAngle += 5;
-			if(curAngle > m_endAngle)
-				m_bAdjustPos = false;
-		}
-		else
-		{
-			curAngle -= 5;
-			if(curAngle < m_endAngle)
-				m_bAdjustPos = false;
-		}
+		auto angle = m_pPlayer->getSprite()->getRotation();
+		auto curAngle = angle + 5;
+		if(curAngle > 360)
+			curAngle -= 360;
+		//SteadyFly是根据m_pSprite的rotation进行移动的
 		m_pPlayer->getSprite()->setRotation(curAngle);
-	}*/
+	}
+	if(m_bLeftPressed)
+	{
+		auto angle = m_pPlayer->getSprite()->getRotation();
+		auto curAngle = angle - 5;
+		if(curAngle < -360)
+			curAngle += 360;
+		m_pPlayer->getSprite()->setRotation(curAngle);
+	}
 	m_pPlayer->update(dt);
 	//每次更新都更新信息
 	_eventDispatcher->dispatchCustomEvent("player",m_pPlayer);
 }
-void PlayerLayer::degreeUpdate(const Point&pos)
+void PlayerLayer::onKeyPressed(SDL_Keycode keycode,SDL_Event*)
 {
-	/*float x = degree.x * 3 + 1;
-	float y = degree.y * 3 + 1;*/
-	//转化成弧度
-	float degree = SDL_atan2(pos.y,pos.x);
-	float angle = SDL_DEGREE_TO_ANGLE(degree);
-	//速度
-	float speed = sqrt(pow(pos.x,2) + pow(pos.y,2))*3 + 1;
-
-	//m_pPlayer->getSprite()->stopAllActions();
-	//使弧度转化为[0,360]
-	/*if(angle > -180.f && angle < -90.f)
-		m_endAngle = 360 + angle;
-	else
-		m_endAngle = angle;*/
-	m_bAdjustPos = true;
-	m_pPlayer->getSprite()->setRotation(angle);
-	m_pPlayer->setCurSpeed(speed);
-	//__android_log_print(ANDROID_LOG_WARN,"Operate","angle=%.2f",angle);
+	if(keycode == SDLK_RIGHT)
+	{
+		m_bRightPressed = true;
+		m_bLeftPressed = false;
+	}
+	else if(keycode == SDLK_LEFT)
+	{
+		m_bRightPressed = false;
+		m_bLeftPressed = true;
+	}
+	else if(keycode == SDLK_UP)
+	{
+		m_pPlayer->setCurSpeed(m_pPlayer->getCurSpeed() + 1);
+	}
+	else if(keycode == SDLK_DOWN)
+	{
+		int curSpeed = m_pPlayer->getCurSpeed();
+		int nextSpeed = curSpeed  - 1;
+		if(nextSpeed < 1)
+			nextSpeed = 1;
+		m_pPlayer->setCurSpeed(nextSpeed);
+	}
+	else if(keycode == SDLK_SPACE)
+	{
+		m_pPlayer->shoot();
+	}
+	//发送消息
+	if(keycode == SDLK_UP || keycode == SDLK_DOWN || keycode == SDLK_SPACE)
+		_eventDispatcher->dispatchCustomEvent("player",m_pPlayer);
 }
-void PlayerLayer::wantShooting()
+void PlayerLayer::onKeyReleased(SDL_Keycode keycode,SDL_Event*)
 {
-	m_pPlayer->shoot();
+	if(keycode == SDLK_RIGHT)
+		m_bRightPressed = false;
+	else if(keycode == SDLK_LEFT)
+		m_bLeftPressed = false;
 }
 void PlayerLayer::shooting(Plane*plane,BulletType type)
 {
@@ -136,23 +149,6 @@ void PlayerLayer::setDelegate(PlayerLayerDelegate*pDelegate)
 {
 	m_pDelegate = pDelegate;
 }
-void PlayerLayer::reset()
-{
-	Size visibleSize = Director::getInstance()->getVisibleSize();
-		Size size = m_pPlayer->getContentSize();
-
-		//设置相应参数
-		m_pPlayer->setCurSpeed(1.f);
-		//
-		m_pPlayer->setCurHp(1);
-		m_pPlayer->setMaxHp(1);
-		m_pPlayer->setAtk(1);
-		m_pPlayer->setAlive(true);
-		m_pPlayer->setVisible(true);
-		m_pPlayer->setBulletNum(2);
-		m_pPlayer->getSprite()->setRotation(-90.f);
-		m_pPlayer->setPosition(visibleSize.width/2,visibleSize.height - size.height);
-}
 void PlayerLayer::playerRevive()
 {
 	Size visibleSize = Director::getInstance()->getVisibleSize();
@@ -166,6 +162,23 @@ void PlayerLayer::playerRevive()
 	m_pPlayer->setAtk(1);
 	m_pPlayer->setAlive(true);
 	m_pPlayer->setVisible(true);
+	m_pPlayer->getSprite()->setRotation(-90.f);
+	m_pPlayer->setPosition(visibleSize.width/2,visibleSize.height - size.height);
+}
+void PlayerLayer::reset()
+{
+	Size visibleSize = Director::getInstance()->getVisibleSize();
+	Size size = m_pPlayer->getContentSize();
+
+	//设置相应参数
+	m_pPlayer->setCurSpeed(1.f);
+	//
+	m_pPlayer->setCurHp(1);
+	m_pPlayer->setMaxHp(1);
+	m_pPlayer->setAtk(1);
+	m_pPlayer->setAlive(true);
+	m_pPlayer->setVisible(true);
+	m_pPlayer->setBulletNum(2);
 	m_pPlayer->getSprite()->setRotation(-90.f);
 	m_pPlayer->setPosition(visibleSize.width/2,visibleSize.height - size.height);
 }

@@ -19,7 +19,10 @@
     <Filter Include="Classes\数据相关">
       <UniqueIdentifier>{78ff83ee-ecde-4a13-8d44-0903aab62526}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Classes\操作层">
+    <Filter Include="Classes\box2d">
+      <UniqueIdentifier>{4e86eeaa-23aa-4c97-baa3-0a094258e920}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Classes\操作">
       <UniqueIdentifier>{3a498505-3932-424b-8b9e-50392b673a98}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -82,22 +85,22 @@
       <Filter>Classes\场景</Filter>
     </ClCompile>
     <ClCompile Include="Classes\OperateLayer.cpp">
-      <Filter>Classes\操作层</Filter>
+      <Filter>Classes\操作</Filter>
     </ClCompile>
     <ClCompile Include="Classes\VirtualStick.cpp">
-      <Filter>Classes\操作层</Filter>
+      <Filter>Classes\操作</Filter>
     </ClCompile>
     <ClCompile Include="Classes\Button.cpp">
-      <Filter>Classes\操作层</Filter>
-    </ClCompile>
-    <ClCompile Include="Classes\PhysicalEngine.cpp">
-      <Filter>Classes</Filter>
+      <Filter>Classes\操作</Filter>
     </ClCompile>
     <ClCompile Include="Classes\DebugDraw.cpp">
-      <Filter>Classes</Filter>
+      <Filter>Classes\box2d</Filter>
     </ClCompile>
     <ClCompile Include="Classes\PhysicalDrawNode.cpp">
-      <Filter>Classes</Filter>
+      <Filter>Classes\box2d</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes\PhysicalEngine.cpp">
+      <Filter>Classes\box2d</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -156,22 +159,22 @@
       <Filter>Classes\场景</Filter>
     </ClInclude>
     <ClInclude Include="Classes\OperateLayer.h">
-      <Filter>Classes\操作层</Filter>
+      <Filter>Classes\操作</Filter>
     </ClInclude>
     <ClInclude Include="Classes\VirtualStick.h">
-      <Filter>Classes\操作层</Filter>
+      <Filter>Classes\操作</Filter>
     </ClInclude>
     <ClInclude Include="Classes\Button.h">
-      <Filter>Classes\操作层</Filter>
-    </ClInclude>
-    <ClInclude Include="Classes\PhysicalEngine.h">
-      <Filter>Classes</Filter>
+      <Filter>Classes\操作</Filter>
     </ClInclude>
     <ClInclude Include="Classes\DebugDraw.h">
-      <Filter>Classes</Filter>
+      <Filter>Classes\box2d</Filter>
     </ClInclude>
     <ClInclude Include="Classes\PhysicalDrawNode.h">
-      <Filter>Classes</Filter>
+      <Filter>Classes\box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\PhysicalEngine.h">
+      <Filter>Classes\box2d</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
