@@ -8,19 +8,20 @@ using namespace std;
 class VirtualStick;
 class Button;
 
-class OperateLayerDelegate
+class OperateDelegate
 {
 public:
-	virtual ~OperateLayerDelegate(){}
-	virtual void degreeUpdate(const Point&degree)=0;
-	virtual void wantShooting()=0;
+	virtual ~OperateDelegate(){}
+	virtual void rotationOfPlayer(float angle, bool delta=false) = 0;
+	virtual void changeSpeedOfPlayer(float speed, bool delta=false) = 0;
+	virtual void wantToShoot()=0;
 };
 class OperateLayer:public Layer
 {
 private:
 	VirtualStick*m_pStick;
 	Button*m_pAtkItem;
-	OperateLayerDelegate*m_pDelegate;
+	OperateDelegate*m_pDelegate;
 public:
 	OperateLayer();
 	~OperateLayer();
@@ -32,6 +33,6 @@ public:
 	virtual void onTouchesEnded(vector<Touch*>,SDL_Event*);
 
 	void updateAtk(Object*sender);
-	void setDelegate(OperateLayerDelegate*pDelegate);
+	void setDelegate(OperateDelegate*pDelegate);
 };
 #endif

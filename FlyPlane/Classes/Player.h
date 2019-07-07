@@ -11,6 +11,9 @@ public:
 	bool init();
 
 	void revive();//重生
+	//旋转
+	void rotateTo(float rotation);
+	void rotateBy(float delta);
 	virtual void onDead();
 };
 #endif

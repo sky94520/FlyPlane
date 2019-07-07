@@ -12,8 +12,8 @@
 using namespace SDL;
 class PanelLayer;
 
-class GameScene:public Scene,public OperateLayerDelegate
-	,public ShootingDelegate,public GameOverDelegate
+class GameScene:public Scene,public OperateDelegate,public ShootingDelegate
+	,public GameOverDelegate
 	,public b2ContactListener
 {
 public:
@@ -23,7 +23,7 @@ public:
 	static int ENEMY_BULLET_MASKBIT;//敌机子弹
 	static int BORDER_MASKBIT;//边界
 private:
-	OperateLayer*m_pOperateLayer;
+	Layer* m_pOperateLayer;
 	PlayerLayer*m_pPlayerLayer;
 	BulletLayer*m_pBulletLayer;
 	EnemyLayer*m_pEnemyLayer;
@@ -37,8 +37,9 @@ public:
 
 	virtual void update(float dt);
 private:
-	virtual void degreeUpdate(const Point&degree);
-	virtual void wantShooting();
+	virtual void rotationOfPlayer(float angle, bool delta=false);
+	virtual void changeSpeedOfPlayer(float speed, bool delta=false);
+	virtual void wantToShoot();
 
 	virtual void shooting(Plane*plane,BulletType type);
 	virtual void gamePause();//游戏暂停

@@ -15,8 +15,9 @@ public:
 	bool init();
 	virtual void update(float dt);
 	//对主角进行操作
-	void degreeUpdate(const Point& degree);
-	void wantShooting();
+	void rotationOfPlayer(float angle, bool delta);
+	void changeSpeedOfPlayer(float speed, bool delta);
+	void wantToShoot();
 
 	 Plane*getPlayer()const;
 	 void setDelegate(ShootingDelegate* pDelegate);

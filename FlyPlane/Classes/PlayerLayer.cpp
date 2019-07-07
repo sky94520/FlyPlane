@@ -84,29 +84,31 @@ void PlayerLayer::update(float dt)
 	//每次更新都更新信息
 	_eventDispatcher->dispatchCustomEvent("player",m_pPlayer);
 }
-void PlayerLayer::degreeUpdate(const Point&pos)
-{
-	/*float x = degree.x * 3 + 1;
-	float y = degree.y * 3 + 1;*/
-	//转化成弧度
-	float degree = SDL_atan2(pos.y,pos.x);
-	float angle = SDL_DEGREE_TO_ANGLE(degree);
-	//速度
-	float speed = sqrt(pow(pos.x,2) + pow(pos.y,2))*3 + 1;
 
-	//m_pPlayer->getSprite()->stopAllActions();
-	//使弧度转化为[0,360]
-	/*if(angle > -180.f && angle < -90.f)
-		m_endAngle = 360 + angle;
+void PlayerLayer::rotationOfPlayer(float angle, bool delta)
+{
+	if (delta)
+		m_pPlayer->rotateBy(angle);
 	else
-		m_endAngle = angle;*/
-	m_bAdjustPos = true;
-	m_pPlayer->getSprite()->setRotation(angle);
-	m_pPlayer->setCurSpeed(speed);
-	//__android_log_print(ANDROID_LOG_WARN,"Operate","angle=%.2f",angle);
+		m_pPlayer->rotateTo(angle);
 }
 
-void PlayerLayer::wantShooting()
+void PlayerLayer::changeSpeedOfPlayer(float speed, bool delta)
+{
+	float newSpeed = speed;
+	if (delta)
+	{
+		newSpeed += m_pPlayer->getCurSpeed();
+		//限定最小速度和最大速度
+		if (newSpeed <= 0.f)
+			newSpeed = 1.f;
+		else if (newSpeed > 3.f)
+			newSpeed = 3.f;
+	}
+	m_pPlayer->setCurSpeed(newSpeed);
+}
+
+void PlayerLayer::wantToShoot()
 {
 	m_pPlayer->shoot();
 }
@@ -145,19 +147,19 @@ void PlayerLayer::setDelegate(ShootingDelegate*pDelegate)
 void PlayerLayer::reset()
 {
 	Size visibleSize = Director::getInstance()->getVisibleSize();
-		Size size = m_pPlayer->getContentSize();
+	Size size = m_pPlayer->getContentSize();
 
-		//设置相应参数
-		m_pPlayer->setCurSpeed(1.f);
-		//
-		m_pPlayer->setCurHp(1);
-		m_pPlayer->setMaxHp(1);
-		m_pPlayer->setAtk(1);
-		m_pPlayer->setAlive(true);
-		m_pPlayer->setVisible(true);
-		m_pPlayer->setBulletNum(2);
-		m_pPlayer->getSprite()->setRotation(-90.f);
-		m_pPlayer->setPosition(visibleSize.width/2,visibleSize.height - size.height);
+	//设置相应参数
+	m_pPlayer->setCurSpeed(1.f);
+	//
+	m_pPlayer->setCurHp(1);
+	m_pPlayer->setMaxHp(1);
+	m_pPlayer->setAtk(1);
+	m_pPlayer->setAlive(true);
+	m_pPlayer->setVisible(true);
+	m_pPlayer->setBulletNum(2);
+	m_pPlayer->getSprite()->setRotation(-90.f);
+	m_pPlayer->setPosition(visibleSize.width/2,visibleSize.height - size.height);
 }
 void PlayerLayer::playerRevive()
 {

@@ -3,6 +3,7 @@
 #include "Enemy.h"
 #include "PanelLayer.h"
 #include "DynamicData.h"
+#include "EventLayer.h"
 
 int GameScene::PLAYER_MASKBIT = 0x01;
 int GameScene::PLAYER_BULLET_MASKBIT = 0x02;
@@ -35,8 +36,20 @@ bool GameScene::init()
 	SoundManager::getInstance()->preloadEffect("music/bigplane_bomb.wav");
 	SoundManager::getInstance()->preloadEffect("music/bullet.ogg");
 	//触摸分发层
-	m_pOperateLayer = OperateLayer::create();
-	m_pOperateLayer->setDelegate(this);
+	std::string platform = Director::getInstance()->getPlatform();
+
+	if (platform == "Windows" || platform == "Linux")
+	{
+		auto layer = EventLayer::create();
+		layer->setDelegate(this);
+		m_pOperateLayer = layer;
+	}
+	else
+	{
+		auto layer = OperateLayer::create();
+		layer->setDelegate(this);
+		m_pOperateLayer = layer;
+	}
 	this->addChild(m_pOperateLayer);
 	//子弹层
 	m_pBulletLayer = BulletLayer::create();
@@ -68,6 +81,7 @@ void GameScene::update(float dt)
 	m_pPlayerLayer->update(dt);
 	m_pBulletLayer->update(dt);
 	m_pEnemyLayer->update(dt);
+	m_pOperateLayer->update(dt);
 
 	int PTM_RATIO = PhysicalEngine::PTM_RATIO;                
 	//遍历物理模型
@@ -90,14 +104,22 @@ void GameScene::update(float dt)
 	PhysicalEngine::getInstance()->step(dt,0,0);
 	//PhysicalEngine::getInstance()->drawDebugData();
 }
-void GameScene::degreeUpdate(const Point&degree)
+
+void GameScene::rotationOfPlayer(float angle, bool delta)
 {
-	m_pPlayerLayer->degreeUpdate(degree);
+	m_pPlayerLayer->rotationOfPlayer(angle, delta);
 }
-void GameScene::wantShooting()
+
+void GameScene::changeSpeedOfPlayer(float speed, bool delta)
 {
-	m_pPlayerLayer->wantShooting();
+	m_pPlayerLayer->changeSpeedOfPlayer(speed, delta);
 }
+
+void GameScene::wantToShoot()
+{
+	m_pPlayerLayer->wantToShoot();
+}
+
 void GameScene::shooting(Plane*plane,BulletType type)
 {
 	m_pBulletLayer->shooting(plane,type);

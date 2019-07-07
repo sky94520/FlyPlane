@@ -30,6 +30,25 @@ void Player::revive()
 	this->getSprite()->runAction(blink);
 	this->runAction(Sequence::create(delayTime,end,nullptr));
 }
+
+void Player::rotateTo(float rotation)
+{
+	this->getSprite()->setRotation(rotation);
+}
+
+void Player::rotateBy(float delta)
+{
+	auto angle = this->getSprite()->getRotation();
+	auto curAngle = angle + delta;
+	//限定范围
+	if(curAngle > 360)
+		curAngle -= 360;
+	else if(curAngle < -360)
+		curAngle += 360;
+	//SteadyFly是根据m_pSprite的rotation进行移动的
+	this->getSprite()->setRotation(curAngle);
+}
+
 void Player::onDead()
 {
 	//死亡动画

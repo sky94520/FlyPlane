@@ -39,9 +39,6 @@
     <ClCompile Include="Classes\GameScene.cpp">
       <Filter>Classes\场景</Filter>
     </ClCompile>
-    <ClCompile Include="Classes\TouchLayer.cpp">
-      <Filter>Classes\场景</Filter>
-    </ClCompile>
     <ClCompile Include="Classes\PlayerLayer.cpp">
       <Filter>Classes\场景</Filter>
     </ClCompile>
@@ -102,6 +99,9 @@
     <ClCompile Include="Classes\PhysicalEngine.cpp">
       <Filter>Classes\box2d</Filter>
     </ClCompile>
+    <ClCompile Include="Classes\EventLayer.cpp">
+      <Filter>Classes\场景</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Classes\Entity.h">
@@ -111,9 +111,6 @@
       <Filter>Classes\实体</Filter>
     </ClInclude>
     <ClInclude Include="Classes\GameScene.h">
-      <Filter>Classes\场景</Filter>
-    </ClInclude>
-    <ClInclude Include="Classes\TouchLayer.h">
       <Filter>Classes\场景</Filter>
     </ClInclude>
     <ClInclude Include="Classes\PlayerLayer.h">
@@ -178,6 +175,9 @@
     </ClInclude>
     <ClInclude Include="Classes\ShootingDelegate.h">
       <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="Classes\EventLayer.h">
+      <Filter>Classes\场景</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

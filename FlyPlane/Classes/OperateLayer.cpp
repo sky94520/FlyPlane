@@ -49,8 +49,15 @@ void OperateLayer::onTouchesBegan(vector<Touch*>touches,SDL_Event*)
 				m_pStick->setFingerId(touch->getID());
 				m_pStick->selected(touch->getLocation());
 				Point dir = m_pStick->getDirection();
+				//转化成弧度
+				float degree = SDL_atan2(dir.y,dir.x);
+				float angle = SDL_DEGREE_TO_ANGLE(degree);
+				//速度
+				float speed = sqrt(pow(dir.x,2) + pow(dir.y,2))*3 + 1;
+				//旋转和改变速度
+				m_pDelegate->rotationOfPlayer(angle);
+				m_pDelegate->changeSpeedOfPlayer(speed);
 
-				m_pDelegate->degreeUpdate(dir);
 				continue;
 			}
 		}
@@ -71,7 +78,14 @@ void OperateLayer::onTouchesMoved(vector<Touch*> touches,SDL_Event*)
 		{
 			m_pStick->selected(touch->getLocation());
 			Point dir = m_pStick->getDirection();
-			m_pDelegate->degreeUpdate(dir);
+			//转化成弧度
+			float degree = SDL_atan2(dir.y,dir.x);
+			float angle = SDL_DEGREE_TO_ANGLE(degree);
+			//速度
+			float speed = sqrt(pow(dir.x,2) + pow(dir.y,2))*3 + 1;
+			//旋转和改变速度
+			m_pDelegate->rotationOfPlayer(angle);
+			m_pDelegate->changeSpeedOfPlayer(speed);
 			//__android_log_print(ANDROID_LOG_WARN,"Operate","x=%.2f,y=%.2f",m_dir.x,m_dir.y);
 		}
 		else if(touch->getID() == m_pAtkItem->getFingerId())
@@ -94,11 +108,11 @@ void OperateLayer::onTouchesEnded(vector<Touch*>touches,SDL_Event*)
 		}
 	}
 }
-void OperateLayer::setDelegate(OperateLayerDelegate*pDelegate)
+void OperateLayer::setDelegate(OperateDelegate*pDelegate)
 {
 	m_pDelegate = pDelegate;
 }
 void OperateLayer::updateAtk(Object*sender)
 {
-	m_pDelegate->wantShooting();
+	m_pDelegate->wantToShoot();
 }

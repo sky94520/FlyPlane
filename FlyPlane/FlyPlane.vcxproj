@@ -93,7 +93,7 @@
     <ClCompile Include="Classes\Player.cpp" />
     <ClCompile Include="Classes\PlayerLayer.cpp" />
     <ClCompile Include="Classes\StartScene.cpp" />
-    <ClCompile Include="Classes\TouchLayer.cpp" />
+    <ClCompile Include="Classes\EventLayer.cpp" />
     <ClCompile Include="Classes\VirtualStick.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -120,7 +120,7 @@
     <ClInclude Include="Classes\PlayerLayer.h" />
     <ClInclude Include="Classes\ShootingDelegate.h" />
     <ClInclude Include="Classes\StartScene.h" />
-    <ClInclude Include="Classes\TouchLayer.h" />
+    <ClInclude Include="Classes\EventLayer.h" />
     <ClInclude Include="Classes\VirtualStick.h" />
   </ItemGroup>
   <ItemGroup>
