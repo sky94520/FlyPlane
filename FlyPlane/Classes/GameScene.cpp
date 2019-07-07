@@ -56,6 +56,8 @@ bool GameScene::init()
 	m_pGameOverLayer->setDelegate(this);
 	m_pGameOverLayer->setVisible(false);
 	this->addChild(m_pGameOverLayer,-1);
+	//添加事件
+	_eventDispatcher->addEventCustomListener(PlayerLayer::GAME_OVER, SDL_CALLBACK_1(GameScene::gameEnd, this), this);
 
 	this->scheduleUpdate();
 
@@ -116,7 +118,7 @@ void GameScene::gameResume()
 	m_pBulletLayer->onEnter();
 	m_pEnemyLayer->onEnter();
 }
-void GameScene::gameEnd()
+void GameScene::gameEnd(EventCustom* ec)
 {
 	this->gamePause();
 	m_pGameOverLayer->setVisible(true);

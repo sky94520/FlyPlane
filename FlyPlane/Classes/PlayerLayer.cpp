@@ -4,6 +4,8 @@
 #include "Player.h"
 #include "DynamicData.h"
 
+const string PlayerLayer::GAME_OVER = "game over";
+
 PlayerLayer::PlayerLayer()
 	:m_pPlayer(nullptr),m_pDelegate(nullptr)
 	,m_bAdjustPos(false),m_endAngle(0.f)
@@ -23,7 +25,7 @@ bool PlayerLayer::init()
 	m_pPlayer->setFlyBehavior(new SteadyFly());
 	//设置发射子弹
 	m_pPlayer->setBulletNum(2);
-	m_pPlayer->setDelegate(this);
+	//m_pPlayer->setDelegate(this);
 	//设置相应参数
 	this->playerRevive();
 
@@ -46,8 +48,10 @@ void PlayerLayer::update(float dt)
 	{
 		int life = DynamicData::getInstance()->getLife();
 		//游戏结束
-		if(life <= 0)
-			m_pDelegate->gameEnd();
+		if (life <= 0)
+		{
+			_eventDispatcher->dispatchCustomEvent(GAME_OVER, m_pPlayer);
+		}
 		else
 		{
 			DynamicData::getInstance()->alterLife(-1);//生命减一
@@ -101,14 +105,12 @@ void PlayerLayer::degreeUpdate(const Point&pos)
 	m_pPlayer->setCurSpeed(speed);
 	//__android_log_print(ANDROID_LOG_WARN,"Operate","angle=%.2f",angle);
 }
+
 void PlayerLayer::wantShooting()
 {
 	m_pPlayer->shoot();
 }
-void PlayerLayer::shooting(Plane*plane,BulletType type)
-{
-	m_pDelegate->shooting(plane,type);
-}
+
 void PlayerLayer::bindPhysicalPlane(Plane*plane)
 {
 	b2Body*body = PhysicalEngine::getInstance()->createBox(plane->getContentSize(),b2_dynamicBody);
@@ -128,14 +130,18 @@ void PlayerLayer::bindPhysicalPlane(Plane*plane)
 	//无阻尼
 	body->SetLinearDamping(0.f);*/
 }
+
  Plane* PlayerLayer::getPlayer()const
 {
 	return m_pPlayer;
 }
-void PlayerLayer::setDelegate(PlayerLayerDelegate*pDelegate)
+
+void PlayerLayer::setDelegate(ShootingDelegate*pDelegate)
 {
 	m_pDelegate = pDelegate;
+	m_pPlayer->setDelegate(pDelegate);
 }
+
 void PlayerLayer::reset()
 {
 	Size visibleSize = Director::getInstance()->getVisibleSize();

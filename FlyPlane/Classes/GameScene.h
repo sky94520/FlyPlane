@@ -7,12 +7,13 @@
 #include "PlayerLayer.h"
 #include "EnemyLayer.h"
 #include "GameOverLayer.h"
+#include "ShootingDelegate.h"
 
 using namespace SDL;
 class PanelLayer;
 
-class GameScene:public Scene,public OperateLayerDelegate,public PlayerLayerDelegate
-	,public EnemyLayerDelegate,public GameOverDelegate
+class GameScene:public Scene,public OperateLayerDelegate
+	,public ShootingDelegate,public GameOverDelegate
 	,public b2ContactListener
 {
 public:
@@ -42,7 +43,7 @@ private:
 	virtual void shooting(Plane*plane,BulletType type);
 	virtual void gamePause();//游戏暂停
 	virtual void gameResume();//游戏恢复
-	virtual void gameEnd();//游戏结束
+	void gameEnd(EventCustom* ec);//游戏结束
 	virtual void gameRestart();//重新开始游戏
 
 	virtual void BeginContact(b2Contact* contact);

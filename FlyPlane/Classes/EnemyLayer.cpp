@@ -15,7 +15,7 @@ EnemyLayer::EnemyLayer()
 EnemyLayer::~EnemyLayer()
 {
 }
-EnemyLayer*EnemyLayer::create( Plane*player,EnemyLayerDelegate*pDelegate)
+EnemyLayer*EnemyLayer::create( Plane*player,ShootingDelegate*pDelegate)
 {
 	auto layer = new EnemyLayer();
 	if(layer && layer->init(player,pDelegate))
@@ -24,7 +24,7 @@ EnemyLayer*EnemyLayer::create( Plane*player,EnemyLayerDelegate*pDelegate)
 		SDL_SAFE_DELETE(layer);
 	return layer;
 }
-bool EnemyLayer::init( Plane*player,EnemyLayerDelegate*pDelegate)
+bool EnemyLayer::init( Plane*player,ShootingDelegate*pDelegate)
 {
 	//保存对player的引用
 	m_pPlayer = player;
@@ -51,7 +51,7 @@ void EnemyLayer::update(float dt)
 		this->addChild(enemy);
 		m_enemies.push_back(enemy);
 
-		enemy->setDelegate(this);
+		enemy->setDelegate(m_pDelegate);
 		//随机生成方向
 		this->setEnemyRotation(enemy);
 		enemy->setPosition(m_pTower->getPosition());

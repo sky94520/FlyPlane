@@ -1,6 +1,9 @@
 ﻿#include "Plane.h"
+#include "ShootingDelegate.h"
+
 Plane::Plane()
-	:m_pDelegate(nullptr),m_nBulletNum(0)
+	:m_pDelegate(nullptr)
+	,m_nBulletNum(0)
 {
 }
 Plane::~Plane()
@@ -29,11 +32,13 @@ void Plane::update(float dt)
 void Plane::onDead()
 {
 }
-PlaneDelegate*Plane::getDelegate()const
+
+ShootingDelegate*Plane::getDelegate()const
 {
 	return m_pDelegate;
 }
-void Plane::setDelegate(PlaneDelegate*pDelegate)
+
+void Plane::setDelegate(ShootingDelegate*pDelegate)
 {
 	m_pDelegate = pDelegate;
 }

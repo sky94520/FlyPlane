@@ -5,20 +5,9 @@
 
 using namespace SDL;
 class Player;
-class PlayerLayerDelegate
+
+class PlayerLayer:public Layer
 {
-public:
-	virtual ~PlayerLayerDelegate(){}
-	virtual void gameEnd()=0;
-	virtual void shooting(Plane*plane,BulletType type) = 0;
-};
-class PlayerLayer:public Layer,public PlaneDelegate
-{
-private:
-	Player*m_pPlayer;
-	bool m_bAdjustPos;//是否调整飞机位置
-	float m_endAngle;
-	PlayerLayerDelegate*m_pDelegate;
 public:
 	PlayerLayer();
 	~PlayerLayer();
@@ -26,16 +15,21 @@ public:
 	bool init();
 	virtual void update(float dt);
 	//对主角进行操作
-	void degreeUpdate(const Point&degree);
+	void degreeUpdate(const Point& degree);
 	void wantShooting();
 
 	 Plane*getPlayer()const;
-	 void setDelegate(PlayerLayerDelegate*pDelegate);
+	 void setDelegate(ShootingDelegate* pDelegate);
 	 void reset();
 private:
 	void playerRevive();//主角重生
-	void bindPhysicalPlane(Plane*plane);
-
-	virtual void shooting(Plane*plane,BulletType type);
+	void bindPhysicalPlane(Plane* plane);
+public:
+	static const string GAME_OVER;
+private:
+	Player*m_pPlayer;
+	bool m_bAdjustPos;//是否调整飞机位置
+	float m_endAngle;
+	ShootingDelegate*m_pDelegate;
 };
 #endif

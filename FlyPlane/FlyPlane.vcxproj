@@ -118,6 +118,7 @@
     <ClInclude Include="Classes\Plane.h" />
     <ClInclude Include="Classes\Player.h" />
     <ClInclude Include="Classes\PlayerLayer.h" />
+    <ClInclude Include="Classes\ShootingDelegate.h" />
     <ClInclude Include="Classes\StartScene.h" />
     <ClInclude Include="Classes\TouchLayer.h" />
     <ClInclude Include="Classes\VirtualStick.h" />
