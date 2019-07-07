@@ -5,10 +5,10 @@ using namespace SDL;
 class PanelLayer:public Layer
 {
 private:
-	LabelAtlas*m_pScoreLabel;
-	LabelAtlas*m_pLifeLabel;
-	LabelAtlas*m_pBulletLabel;
-	LabelAtlas*m_pSpeedLabel;
+	LabelBMFont*m_pScoreLabel;
+	LabelBMFont*m_pLifeLabel;
+	LabelBMFont*m_pBulletLabel;
+	LabelBMFont*m_pSpeedLabel;
 public:
 	PanelLayer();
 	~PanelLayer();

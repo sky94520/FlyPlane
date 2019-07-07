@@ -15,12 +15,13 @@ bool GameOverLayer::init()
 	LayerColor*bg = LayerColor::create(Color4B(0,0,0,128));
 	this->addChild(bg);
 	//添加分数信息
-	LabelTTF*scoreLabel = LabelTTF::createWithWrapLine("Game Over",50,20);
+	//LabelTTF*scoreLabel = LabelTTF::createWithWrapLine("Game Over",50,20);
+	LabelBMFont* scoreLabel = LabelBMFont::create("游戏结束", "fonts/1.fnt", 200, Color3B(0, 0, 0));
 	
 	scoreLabel->setPosition(visibleSize.width/2,visibleSize.height/2);
 	this->addChild(scoreLabel);
 	//添加重新开始按钮
-	MenuItemLabel*restartBtn = MenuItemLabel::create(LabelTTF::create("RESTART"));
+	MenuItemLabel*restartBtn = MenuItemLabel::create(LabelBMFont::create("重新开始", "fonts/1.fnt", 200, Color3B(255, 255, 255)));
 	restartBtn->setCallback(SDL_CALLBACK_1(GameOverLayer::gameRestart,this));
 	restartBtn->setPosition(visibleSize.width/2,visibleSize.height/2 + scoreLabel->getContentSize().height);
 
